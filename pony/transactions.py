@@ -22,6 +22,7 @@ def newOrder_tran():
 		o_district=district
 	)
 	
+	
 	for i in range(ol_cnt):
 		item = Item.select_random(1)[0]
 		stock = Stock[whouse, item]
@@ -42,6 +43,7 @@ def newOrder_tran():
 @db_session
 def payment_tran():
 	pass
+	
 
 
 @db_session
