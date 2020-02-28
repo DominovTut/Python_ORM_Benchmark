@@ -8,9 +8,9 @@ MAX_C_ID = 10
 
 @db_session
 def newOrder_tran():
-	whouse = Warehouse[randint(1, MAX_W_ID)]
-	district = District[randint(1, 25)]
-	customer = Customer[randint(1, MAX_C_ID)]
+	whouse = Warehouse.select_random(1)[0]
+	district = District.select_random(1)[0]
+	customer = Customer.select_random(1)[0]
 	ol_cnt = randint(1, 10)
 	amount = randint(1, 10)
 	
@@ -23,7 +23,7 @@ def newOrder_tran():
 	)
 	
 	for i in range(ol_cnt):
-		item = Item[randint(1, MAX_ITEM_ID)]
+		item = Item.select_random(1)[0]
 		stock = Stock[whouse, item]
 		stock.s_order_cnt += 1
 		stock.s_quantity -= amount
