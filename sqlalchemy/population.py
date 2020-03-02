@@ -23,7 +23,7 @@ def populate(n):
 				w_city=choice(citys),
 				w_zip='w_zip %d' %i,
 				w_tax=float(i),
-				w_yid=float(i * i)
+				w_ytd=0
 		)
 		session.add(w)
 
@@ -36,7 +36,7 @@ def populate(n):
 				d_city=w.w_city,
 				d_zip='d_zip %d' %j,
 				d_tax=float(j),
-				d_yid=float(j * j),
+				d_ytd=0,
 			)
 			session.add(d)
 			d_cnt += 1
@@ -57,9 +57,9 @@ def populate(n):
 			c_credit_lim=randint(1000, 100000),
 			c_discount=choice((0, 10, 15, 20, 30)),
 			c_delivery_cnt=0,
-			c_payment_cnt=randint(0, 100000),
-			c_balance=randint(0, 100000),
-			c_ytd_payment=randint(0, 100000),
+			c_payment_cnt=0,
+			c_balance=1000000,
+			c_ytd_payment=0,
 			c_data1='customer %d' %i,
 			c_dtata2='hello %d'  %i,
 			c_district=randint(1, d_cnt),
@@ -90,4 +90,5 @@ def populate(n):
 
 
 if __name__ == '__main__':
+	create_tables()
 	populate(5)

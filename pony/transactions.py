@@ -1,6 +1,7 @@
 from models import *
-from random import randint
+from random import randint, choice
 from datetime import datetime
+from pony.orm import *
 
 MAX_W_ID = 5
 MAX_ITEM_ID = 100
@@ -9,7 +10,7 @@ MAX_C_ID = 10
 @db_session
 def newOrder_tran():
 	whouse = Warehouse.select_random(1)[0]
-	district = District.select_random(1)[0]
+	district = choice(list(select(d for d in District if d.d_warehouse == whouse)))
 	customer = Customer.select_random(1)[0]
 	ol_cnt = randint(1, 10)
 	amount = randint(1, 10)
@@ -42,7 +43,25 @@ def newOrder_tran():
 
 @db_session
 def payment_tran():
-	pass
+	whouse = Warehouse.select_random(1)[0]
+	district = choice(list(select(d for d in District if d.d_warehouse == whouse)))
+	customer = Customer.select_random(1)[0]
+	h_amount = randint(10, 5000)
+	
+	whouse.w_ytd += h_amount
+	district.d_ytd += h_amount
+	customer.c_balance -= h_amount
+	customer.c_ytd_payment += h_amount
+	customer.c_payment_cnt += 1
+	
+	History(
+		h_date=datetime.now(),
+		h_amount=h_amount,
+		h_data='new_paynment',
+		h_customer=customer,
+	)	
+		
+	
 	
 
 

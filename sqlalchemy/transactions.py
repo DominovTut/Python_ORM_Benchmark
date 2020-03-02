@@ -50,8 +50,28 @@ def newOrder_tran():
 		
 		
 def payment_tran():
-	pass
-
+	Session = sessionmaker(bind=engine)
+	session = Session()
+	
+	whouse = session.query(Warehouse).filter(Warehouse.id == randint(1, MAX_W_ID)).first()
+	districts = session.query(District).filter(District.d_warehouse == whouse.id)
+	district = choice(list(districts))
+	customer = session.query(Customer).filter(Customer.id == randint(1, MAX_C_ID)).first()
+	h_amount = randint(10, 5000)
+	
+	whouse.w_ytd += h_amount
+	district.d_ytd += h_amount
+	customer.c_balance -= h_amount
+	customer.c_ytd_payment += h_amount
+	customer.c_payment_cnt += 1
+	
+	session.add(History(
+		h_date=datetime.now(),
+		h_amount=h_amount,
+		h_data='new_paynment',
+		h_customer=customer.id,
+	))	
+	session.commit()
 
 
 def orderStatus_tran():
