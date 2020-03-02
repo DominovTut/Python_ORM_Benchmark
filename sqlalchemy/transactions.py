@@ -66,16 +66,22 @@ def payment_tran():
 	customer.c_payment_cnt += 1
 	
 	session.add(History(
-		h_date=datetime.now(),
 		h_amount=h_amount,
 		h_data='new_paynment',
+		h_date=datetime.now(),
 		h_customer=customer.id,
 	))	
 	session.commit()
 
 
 def orderStatus_tran():
-	pass
+	Session = sessionmaker(bind=engine)
+	session = Session()
+	
+	customer = session.query(Customer).filter(Customer.id == randint(1, MAX_C_ID)).first()
+	last_order = list(session.query(Order))[-1]
+	ol_s = list(select(ol for ol in OrderLine if ol.ol_order == last_order))
+
 
 
 
