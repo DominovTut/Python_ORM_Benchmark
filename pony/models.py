@@ -13,7 +13,7 @@ class Warehouse(db.Entity):
 	w_city = Required(str)
 	w_zip = Required(str)
 	w_tax = Required(float)
-	w_yid = Required(float)
+	w_ytd = Required(float)
 	
 	w_orders = Set("Order")
 	w_districts = Set("District")
@@ -29,7 +29,7 @@ class District(db.Entity):
 	d_city = Required(str)
 	d_zip = Required(str)
 	d_tax = Required(float)
-	d_yid = Required(float)
+	d_ytd = Required(float)
 	d_orders = Set("Order")
 	d_costomers = Set("Customer")
 

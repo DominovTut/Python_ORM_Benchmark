@@ -22,7 +22,7 @@ class Warehouse(Base):
 	w_city = Column(String(255), nullable=False)
 	w_zip = Column(String(255), nullable=False)
 	w_tax = Column(Float, nullable=False)
-	w_yid = Column(Float, nullable=False)
+	w_ytd = Column(Float, nullable=False)
 	
 	w_orders = relationship("Order") 	
 	w_districts = relationship("District")	 
@@ -40,7 +40,7 @@ class District(Base):
 	d_city = Column(String, nullable=False)
 	d_zip = Column(String, nullable=False)
 	d_tax = Column(Float, nullable=False)
-	d_yid = Column(Float, nullable=False)
+	d_ytd = Column(Float, nullable=False)
 	d_orders = relationship("Order")
 	d_costomers = relationship("Customer")
 
@@ -136,5 +136,3 @@ def create_tables():
     Base.metadata.create_all(engine)
 
 
-if __name__ == '__main__':
-	create_tables()
