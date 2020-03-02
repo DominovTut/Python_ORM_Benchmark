@@ -92,7 +92,7 @@ class Order(db.Entity):
 
 
 class OrderLine(db.Entity):
-	ol_delivery_d = Required(datetime)
+	ol_delivery_d = Optional(datetime)
 	ol_item = Required(Item)
 	ol_amount = Required(int)
 	ol_order = Required(Order)

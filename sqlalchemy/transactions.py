@@ -46,7 +46,7 @@ def newOrder_tran():
 			ol_delivery_d=datetime.now()
 		)
 		session.add(ord_line)
-	session.commit()
+		session.commit()
 		
 		
 def payment_tran():
@@ -80,8 +80,9 @@ def orderStatus_tran():
 	
 	customer = session.query(Customer).filter(Customer.id == randint(1, MAX_C_ID)).first()
 	last_order = list(session.query(Order))[-1]
-	ol_s = list(select(ol for ol in OrderLine if ol.ol_order == last_order))
-
+	o_ls = list(session.query(OrderLine).filter(OrderLine.ol_order == last_order.id ))
+	
+	
 
 
 

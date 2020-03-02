@@ -32,8 +32,7 @@ def newOrder_tran():
 		ord_line = OrderLine(
 			ol_item=item,
 			ol_amount=amount,
-			ol_order=order,
-			ol_delivery_d=datetime.now()
+			ol_order=order
 		)
 		
 		
@@ -67,7 +66,11 @@ def payment_tran():
 
 @db_session
 def orderStatus_tran():
-	pass
+	customer = Customer.select_random(1)[0]
+	last_order = list(select(o for o in Order))[-1]
+	ol_s = list(select(ol for ol in OrderLine if ol.ol_order == last_order))
+
+	
 
 
 @db_session

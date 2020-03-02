@@ -116,7 +116,7 @@ class OrderLine(Base):
 	__tablename__ = 'order_line'
 	
 	id = Column(Integer, primary_key=True)
-	ol_delivery_d = Column(DateTime, nullable=False)
+	ol_delivery_d = Column(DateTime, nullable=True)
 	ol_item = Column(Integer, ForeignKey('item.id'))
 	ol_amount = Column(Integer, nullable=False)
 	ol_order = Column(Integer, ForeignKey('order.id'))
