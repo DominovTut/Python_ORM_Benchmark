@@ -109,7 +109,7 @@ class Order(Base):
 	o_ol_cnt = Column(Integer, nullable=False)
 	o_customer = Column(Integer, ForeignKey('customer.id'))
 	o_entry_d = Column(DateTime, nullable=False)
-	o_o_lns = relationship("OrderLine") 
+	o_lns = relationship("OrderLine") 
 
 
 class OrderLine(Base):
