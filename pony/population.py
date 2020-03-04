@@ -34,7 +34,7 @@ def populate(n):
 			)
 			d_cnt +=1
 
-	for i in range(2 * n):
+	for i in range(10 * n):
 		c = Customer(
 			c_first_name=choice(names),
 			c_middle_name=choice(names),

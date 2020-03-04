@@ -1,12 +1,10 @@
 import os
 import time
-from random import choice
+from random import randint
 
 from models import *
 from sqlalchemy.orm import sessionmaker
 from transactions import *
-
-tran_choice = [newOrder_tran,  payment_tran, orderStatus_tran]#, delivery_tran, stockLevel_tran]
 
 
 cnt = 0
@@ -26,7 +24,8 @@ while True:
 		c_id = randint(1, 10)
 		orderStatus_tran(c_id)
 	elif choice <= 96:
-		delivery_tran()
+		w_id = randint(1, 5)
+		delivery_tran(w_id)
 	else:
 		stockLevel_tran()
 	now = time.time()

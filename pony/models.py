@@ -88,7 +88,9 @@ class Order(db.Entity):
 	o_ol_cnt = Required(int)
 	o_customer = Required(Customer)
 	o_entry_d = Required(datetime)
-	o_lns = Set("OrderLine") 
+	is_o_delivered = Required(bool, default=False)
+	o_lns = Set("OrderLine")
+	
 
 
 class OrderLine(db.Entity):

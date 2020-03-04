@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import Column, DateTime, Integer, SmallInteger, String, create_engine, ForeignKey, BigInteger, Float, Numeric, Text, JSON
+from sqlalchemy import Column, DateTime, Integer, SmallInteger, String, create_engine, ForeignKey, BigInteger, Float, Boolean, Text 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -109,6 +109,7 @@ class Order(Base):
 	o_ol_cnt = Column(Integer, nullable=False)
 	o_customer = Column(Integer, ForeignKey('customer.id'))
 	o_entry_d = Column(DateTime, nullable=False)
+	is_o_delivered = Column(Boolean, nullable=False, default=False)
 	o_lns = relationship("OrderLine") 
 
 

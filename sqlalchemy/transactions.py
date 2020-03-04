@@ -96,8 +96,23 @@ def orderStatus_tran(c_id):
 
 
 
-def delivery_tran():
-	pass
+def delivery_tran(w_id):
+	Session = sessionmaker(bind=engine)
+	session = Session()
+	
+	whouse = session.query(Warehouse).filter(Warehouse.id == w_id).first()
+	districts = session.query(District).filter(District.d_warehouse == whouse.id)
+	for district in districts:
+		order = session.query(Order).filter(Order.o_district == district.id and Order.is_o_delivered == False).order_by(text("id")).first()
+		session.query(Order).filter(Order.o_district == district.id and Order.is_o_delivered == False).order_by(text("id")).first()
+		if not order:
+			return
+		order.is_o_delivered = True
+		for o_l in order.o_lns:
+			o_l.ol_delivery_d = datetime.now()
+		customer = session.query(Customer).filter(Customer.id == order.o_customer).first()
+		customer.c_delivery_cnt += 1
+	session.commit()
 
 
 def stockLevel_tran():

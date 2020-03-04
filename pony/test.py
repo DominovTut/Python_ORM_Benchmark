@@ -13,18 +13,19 @@ while True:
 	choice = randint(1, 100)
 	if choice <= 45:
 		w_id = randint(1, 5)
-		c_id = randint(1, 10)
+		c_id = randint(1, 50)
 		i_id = randint(1, 100)
-		newOrder_tran(w_id, c_id, i_id)
+		newOrder_tran(w_id, c_id)
 	elif choice <= 88:
 		w_id = randint(1, 5)
-		c_id = randint(1, 10)
+		c_id = randint(1, 50)
 		payment_tran(w_id, c_id)
 	elif choice <= 92:
-		c_id = randint(1, 10)
+		c_id = randint(1, 50)
 		orderStatus_tran(c_id)
 	elif choice <= 96:
-		delivery_tran()
+		w_id = randint(1, 5)
+		delivery_tran(w_id)
 	else:
 		stockLevel_tran()
 		
