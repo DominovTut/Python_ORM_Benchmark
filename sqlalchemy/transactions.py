@@ -115,5 +115,19 @@ def delivery_tran(w_id):
 	session.commit()
 
 
-def stockLevel_tran():
-	pass
+def stockLevel_tran(w_id):
+	Session = sessionmaker(bind=engine)
+	session = Session()
+	
+	whouse = session.query(Warehouse).filter(Warehouse.id == w_id).first()
+	
+	items_stock = {}
+	for order in session.query(Order).filter(Order.o_whouse == whouse.id).order_by(text("id desc"))[:20]:
+		for ol in order.o_lns:
+			item = session.query(Item).filter(Item.id == ol.ol_item).first()
+			if item.i_name in items_stock.keys():
+				continue
+			stock = session.query(Stock).filter(Stock.s_w == whouse.id and Stock.s_i == item.id).first()
+			items_stock[item.i_name] = stock.s_quantity
+			
+	

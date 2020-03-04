@@ -98,5 +98,17 @@ def delivery_tran(w_id):
 
 
 @db_session(retry=10)
-def stockLevel_tran():
-	pass
+def stockLevel_tran(w_id):
+	whouse = Warehouse[w_id]
+	orders = select(o for o in Order if o.o_whouse == whouse).order_by(lambda o: desc(o.id))[:20]
+	items_stock = {}
+	for order in orders:
+		for ol in order.o_lns:
+			item_name = ol.ol_item.i_name
+			if item_name in items_stock.keys():
+				continue
+			stock = Stock[whouse, ol.ol_item]
+			items_stock[item_name] = stock.s_quantity
+	
+	
+	

@@ -27,7 +27,8 @@ while True:
 		w_id = randint(1, 5)
 		delivery_tran(w_id)
 	else:
-		stockLevel_tran()
+		w_id = randint(1, 5)
+		stockLevel_tran(w_id)
 		
 	now = time.time()
 	if now - start >= 10:
