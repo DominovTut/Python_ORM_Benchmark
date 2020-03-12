@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 
 
 
-engine = create_engine('sqlite:////home/dominov/dev/benchmark/sqlalchemy/sqlalchemy.db')
+engine = create_engine("postgresql://bench_sa:alchemy@localhost/bench_sa")
 
 Base = declarative_base()
 

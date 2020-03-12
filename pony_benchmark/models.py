@@ -3,7 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 
 
-db = Database(provider='sqlite', filename='pony.db', create_db=True)
+db = Database(provider='postgres', user='benchmark', password='bench', host='localhost', database='benchmark')
 
 
 class Warehouse(db.Entity):

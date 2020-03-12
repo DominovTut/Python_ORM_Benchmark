@@ -12,22 +12,18 @@ start = now = time.time()
 while True:
 	choice = randint(1, 100)
 	if choice <= 45:
-		w_id = randint(1, 5)
-		c_id = randint(1, 10)
-		new_order_tran(w_id, c_id)
+		tran = [new_order_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
 	elif choice <= 88:
-		w_id = randint(1, 5)
-		c_id = randint(1, 10)
-		payment_tran(w_id, c_id)
+		tran = [payment_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
 	elif choice <= 92:
-		c_id = randint(1, 10)
-		order_status_tran(c_id)
+		tran = [order_status_tran, {'c_id' : randint(1, 10)}]
 	elif choice <= 96:
-		w_id = randint(1, 5)
-		delivery_tran(w_id)
+		tran = [delivery_tran, {'w_id' : randint(1, 5)}]
 	else:
-		w_id = randint(1, 5)
-		stock_level_tran(w_id)
+		tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
+	
+	tran[0](**tran[1])
+			
 	now = time.time()
 	if now - start >= 10:
 		start = now

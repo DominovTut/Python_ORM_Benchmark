@@ -14,6 +14,7 @@ MAX_C_ID = 10
 
 
 def new_order_tran(w_id, c_id):
+	print("new order")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -50,6 +51,7 @@ def new_order_tran(w_id, c_id):
 		
 		
 def payment_tran(w_id, c_id):
+	print('payment', w_id, c_id)
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -75,6 +77,7 @@ def payment_tran(w_id, c_id):
 
 
 def order_status_tran(c_id):
+	print("order status")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -91,11 +94,13 @@ def order_status_tran(c_id):
 			'ol_amount' : ol.amount,
 			'ol_order' : ol.order
 		})
+	session.close()
 	
 
 
 
 def delivery_tran(w_id):
+	print("delivery")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -105,6 +110,7 @@ def delivery_tran(w_id):
 		order = session.query(Order).filter(Order.district == district.id and Order.is_o_delivered == False).order_by(text("id")).first()
 		session.query(Order).filter(Order.district == district.id and Order.is_o_delivered == False).order_by(text("id")).first()
 		if not order:
+			session.close()
 			return
 		order.is_o_delivered = True
 		for o_l in order.o_lns:
@@ -115,6 +121,7 @@ def delivery_tran(w_id):
 
 
 def stock_level_tran(w_id):
+	print("stock level")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -128,5 +135,6 @@ def stock_level_tran(w_id):
 				continue
 			stock = session.query(Stock).filter(Stock.warehouse == whouse.id and Stock.item == item.id).first()
 			items_stock[item.name] = stock.quantity
+	session.close()
 			
 	
