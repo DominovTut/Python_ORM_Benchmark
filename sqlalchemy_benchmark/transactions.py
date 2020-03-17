@@ -14,7 +14,7 @@ MAX_C_ID = 10
 
 
 def new_order_tran(w_id, c_id):
-	print("new order")
+	#print("new order")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -51,7 +51,7 @@ def new_order_tran(w_id, c_id):
 		
 		
 def payment_tran(w_id, c_id):
-	print('payment', w_id, c_id)
+	#print('payment', w_id, c_id)
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -77,7 +77,7 @@ def payment_tran(w_id, c_id):
 
 
 def order_status_tran(c_id):
-	print("order status")
+	#print("order status")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -86,6 +86,7 @@ def order_status_tran(c_id):
 	o_ls = []
 	
 	if not last_order:
+		session.close()
 		return
 	for ol in last_order.o_lns:
 		o_ls.append({
@@ -100,7 +101,7 @@ def order_status_tran(c_id):
 
 
 def delivery_tran(w_id):
-	print("delivery")
+	#print("delivery")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -121,7 +122,7 @@ def delivery_tran(w_id):
 
 
 def stock_level_tran(w_id):
-	print("stock level")
+	#print("stock level")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	

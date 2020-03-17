@@ -5,7 +5,7 @@ from pony.orm import *
 
 
 
-@db_session(retry=10)
+@db_session
 def new_order_tran(w_id, c_id):
 	whouse = Warehouse[w_id]
 	district = choice(list(select(d for d in District if d.warehouse == whouse)))
@@ -38,7 +38,7 @@ def new_order_tran(w_id, c_id):
 	
 
 
-@db_session(retry=10)
+@db_session
 def payment_tran(w_id, c_id):
 	whouse = Warehouse[w_id]
 	district = choice(list(select(d for d in District if d.warehouse == whouse)))
@@ -62,12 +62,13 @@ def payment_tran(w_id, c_id):
 	
 
 
-@db_session(retry=10)
+@db_session
 def order_status_tran(c_id):
 	customer = Customer[c_id]
 	last_order = customer.orders.select().order_by(lambda o: desc(o.id)).first()
 	o_ls = []
 	if not last_order:
+		commit()
 		return
 	status = last_order.is_o_delivered
 	for ol in last_order.o_lns:
@@ -83,13 +84,14 @@ def order_status_tran(c_id):
 	
 
 
-@db_session(retry=10)
+@db_session
 def delivery_tran(w_id):
 	whouse = Warehouse[w_id]
 	districts = list(select(d for d in District if d.warehouse == whouse))
 	for district in districts:
 		order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id).first()
 		if not order:
+			commit()
 			return
 		order.is_o_delivered = True
 		for o_l in order.o_lns:
@@ -97,7 +99,7 @@ def delivery_tran(w_id):
 		order.customer.delivery_cnt += 1
 
 
-@db_session(retry=10)
+@db_session
 def stock_level_tran(w_id):
 	whouse = Warehouse[w_id]
 	orders = select(o for o in Order if o.warehouse == whouse).order_by(lambda o: desc(o.id))[:20]
