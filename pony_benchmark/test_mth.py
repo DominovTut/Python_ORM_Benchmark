@@ -3,11 +3,17 @@ from transactions import *
 import os
 import time
 from random import randint
-from multiprocessing import Process, Value
+from threading import Thread, Lock
 
 
-def test(cnt, start, now):
-	now = time.time()
+CNT = 0
+RES = []
+lock = Lock()
+
+
+def test():
+	global CNT, start, now, gl_start
+	
 	while now - gl_start < 601:
 		choice = randint(1, 100)
 		if choice <= 45:
@@ -23,30 +29,29 @@ def test(cnt, start, now):
 		for i in range(10):
 			try:
 				tran[0](**tran[1])
-				cnt.value += 1
+				CNT += 1
 				break
 			except:
 				continue
 		now = time.time()
-		if now - start.value >= 60:
-			print(cnt.value)
-			cnt.value = 0
-			start.value = now
+		if now - start >= 60:
+			with lock:
+				print(CNT)
+				CNT = 0
+			start = now
 
 
+		
+db.generate_mapping(create_tables=True)
+threads = []
+gl_start = start = now = time.time()
 
-if __name__ == '__main__':
-	db.generate_mapping(create_tables=True)
-	cnt = Value('i', 0)
-	start = Value('d', 0.0)
-	processes = []
-	start.value = gl_start = time.time()
-
-	for i in range(2):
-		process = Process(target=test, args=(cnt, start, gl_start))
-		process.start()
-		processes.append(process)
+for i in range(5):
+	process = Thread(target=test)
+	process.start()
+	threads.append(process)
 
 
-	for process in processes:
-		process.join()
+for process in threads:
+	process.join()
+			

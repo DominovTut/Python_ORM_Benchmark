@@ -65,7 +65,7 @@ class Stock(db.Entity):
 	item = Required("Item")
 	PrimaryKey(warehouse, item)
 	quantity = Required(int)
-	ytd = Required(int)
+	ytd = Required(float)
 	order_cnt = Required(int)
 	remote_cnt = Required(int)
 	data = Required(str)

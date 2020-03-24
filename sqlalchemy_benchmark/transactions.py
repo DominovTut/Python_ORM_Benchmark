@@ -6,15 +6,10 @@ from models import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 
-MAX_W_ID = 5
-MAX_ITEM_ID = 100
-MAX_C_ID = 10
-
 
 
 
 def new_order_tran(w_id, c_id):
-	#print("new order")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -51,7 +46,6 @@ def new_order_tran(w_id, c_id):
 		
 		
 def payment_tran(w_id, c_id):
-	#print('payment', w_id, c_id)
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -77,7 +71,6 @@ def payment_tran(w_id, c_id):
 
 
 def order_status_tran(c_id):
-	#print("order status")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -101,7 +94,6 @@ def order_status_tran(c_id):
 
 
 def delivery_tran(w_id):
-	#print("delivery")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	
@@ -122,7 +114,6 @@ def delivery_tran(w_id):
 
 
 def stock_level_tran(w_id):
-	#print("stock level")
 	Session = sessionmaker(bind=engine)
 	session = Session()
 	

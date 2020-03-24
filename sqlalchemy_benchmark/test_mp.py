@@ -5,19 +5,13 @@ from random import randint
 from models import *
 from sqlalchemy.orm import sessionmaker
 from transactions import *
-from threading import Thread, Lock
+from multiprocessing import Process, Value
 
 
-CNT = 0
-RES = []
-lock = Lock()
 
-
-def test():
-	global CNT, start, now, gl_start
-	
-	while now - gl_start < 60:
-		CNT += 1
+def test(cnt, start, now):
+	now = time.time()
+	while now - gl_start < 601:
 		choice = randint(1, 100)
 		if choice <= 45:
 			tran = [new_order_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
@@ -32,32 +26,30 @@ def test():
 		for i in range(10):
 			try:
 				tran[0](**tran[1])
+				cnt.value += 1
 				break
 			except:
 				continue
 		now = time.time()
-		if now - start >= 10:
-			with lock:
-				print(CNT)
-				CNT = 0
-			start = now
+		if now - start.value >= 60:
+			print(cnt.value)
+			cnt.value = 0
+			start.value = now
 
 
 
-		
-gl_start = start = now = time.time()
+if __name__ == '__main__':
+	cnt = Value('i', 0)
+	start = Value('d', 0.0)
+	processes = []
+	start.value = gl_start = time.time()
 
-t1 = Thread(target=test)
-t2 = Thread(target=test)
-t3 = Thread(target=test)
+	for i in range(2):
+		process = Process(target=test, args=(cnt, start, gl_start))
+		process.start()
+		processes.append(process)
 
 
-t1.start()
-t2.start()
-t3.start()
-#counter.start()
-
-t1.join()
-t2.join()
-t3.join()
+	for process in processes:
+		process.join()
 			
