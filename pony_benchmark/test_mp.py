@@ -9,9 +9,9 @@ from multiprocessing import Process, Value
 def test_controler(cnt, run, start, gl_start):
 	while run.value:
 		now = time.time()
-		if now - gl_start >= 61:
+		if now - gl_start >= 601:
 			run.value = False
-		if now - start.value >= 10:
+		if now - start.value >= 60:
 			print(cnt.value)
 			with cnt.get_lock():
 				cnt.value = 0
@@ -34,19 +34,16 @@ def test(cnt, run):
 			tran = [delivery_tran, {'w_id' : randint(1, 5)}]
 		else:
 			tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
-		for i in range(10):
-			try:
-				tran[0](**tran[1])
-				with cnt.get_lock():
-					cnt.value += 1
-				break
-			except:
-				continue
+		
+		tran[0](**tran[1])
+		db.disconnect()
+		with cnt.get_lock():
+			cnt.value += 1
 
 
+db.generate_mapping(create_tables=True)
 
 if __name__ == '__main__':
-	db.generate_mapping(create_tables=True)
 	cnt = Value('i', 0)
 	start = Value('d', 0.0)
 	processes = []

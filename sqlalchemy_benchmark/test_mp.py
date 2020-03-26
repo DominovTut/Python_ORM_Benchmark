@@ -37,14 +37,11 @@ def test(cnt, run):
 			tran = [delivery_tran, {'w_id' : randint(1, 5)}]
 		else:
 			tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
-		for i in range(10):
-			try:
-				tran[0](**tran[1])
-				with cnt.get_lock():
-					cnt.value += 1
-				break
-			except:
-				continue
+				
+		tran[0](**tran[1])
+		with cnt.get_lock():
+			cnt.value += 1
+
 
 
 
