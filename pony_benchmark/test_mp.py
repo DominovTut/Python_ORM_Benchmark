@@ -36,7 +36,6 @@ def test(cnt, run):
 			tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
 		
 		tran[0](**tran[1])
-		db.disconnect()
 		with cnt.get_lock():
 			cnt.value += 1
 
