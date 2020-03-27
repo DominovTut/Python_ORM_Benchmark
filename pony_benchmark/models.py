@@ -63,7 +63,7 @@ class Customer(db.Entity):
 class Stock(db.Entity):
 	warehouse = Required(Warehouse)
 	item = Required("Item")
-	PrimaryKey(warehouse, item)
+	composite_key(warehouse, item)
 	quantity = Required(int)
 	ytd = Required(float)
 	order_cnt = Required(int)

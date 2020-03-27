@@ -8,7 +8,7 @@ from pony.orm import *
 @db_session(retry=10)
 def new_order_tran(w_id, c_id):
 	whouse = Warehouse[w_id]
-	district = choice(list(select(d for d in District if d.warehouse == whouse)))
+	district = choice(list(select(d for d in District if d.warehouse == whouse)))	
 	customer = Customer[c_id]
 	ol_cnt = randint(1, 10)
 	amount = randint(1, 10)
@@ -20,18 +20,21 @@ def new_order_tran(w_id, c_id):
 		warehouse=whouse,
 		district=district
 	)
-	
+	items = []
 	for i in range(ol_cnt):
 		item = Item[randint(1, 100)]
-		stock = Stock[whouse, item]
-		stock.order_cnt += 1
-		stock.quantity -= amount
+		items.append(item)
 		ord_line = OrderLine(
 			item=item,
 			amount=amount,
 			order=order
 		)
-		commit()
+	stocks = select(stock for stock in Stock 
+					if stock.warehouse == whouse and stock.item in items).order_by(Stock.id).for_update()
+	for stock in stocks:
+		stock.order_cnt += 1
+		stock.quantity -= amount
+
 
 		
 		
@@ -88,17 +91,19 @@ def order_status_tran(c_id):
 @db_session(retry=10)
 def delivery_tran(w_id):
 	whouse = Warehouse[w_id]
-	districts = list(select(d for d in District if d.warehouse == whouse))
-	for district in districts:
-		order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id).first()
+	o_cust = []
+	for district in whouse.districts:
+		order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id).for_update().first()
 		if not order:
-			commit()
 			return
 		order.is_o_delivered = True
 		for o_l in order.o_lns:
 			o_l.delivery_d = datetime.now()
-		order.customer.delivery_cnt += 1
-		commit()
+		o_cust.append(order.customer)
+
+	customers = select(c for c in Customer if c in o_cust).order_by(Customer.id).for_update()
+	for customer in customers:
+		customer.delivery_cnt += 1
 
 
 @db_session(retry=10)
@@ -111,7 +116,7 @@ def stock_level_tran(w_id):
 			item_name = ol.item.name
 			if item_name in items_stock.keys():
 				continue
-			stock = Stock[whouse, ol.item]
+			stock = select(s for s in Stock if s.warehouse == whouse and s.item == ol.item).first()
 			items_stock[item_name] = stock.quantity
 	
 	

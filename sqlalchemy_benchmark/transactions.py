@@ -110,7 +110,8 @@ def delivery_tran(w_id):
 			o_l.delivery_d = datetime.now()
 		customer = session.query(Customer).filter(Customer.id == order.customer).first()
 		customer.delivery_cnt += 1
-		session.commit()
+	session.commit()
+
 
 
 def stock_level_tran(w_id):

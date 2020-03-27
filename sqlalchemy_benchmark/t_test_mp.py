@@ -1,9 +1,12 @@
-from pony.orm import *
-from transactions import *
 import os
 import time
 from random import randint
-from multiprocessing import Process, Value
+
+from models import *
+from sqlalchemy.orm import sessionmaker
+from transactions import *
+from multiprocessing import Process, Value, Lock
+
 
 
 def test_controler(cnt, run, start, gl_start):
@@ -24,23 +27,23 @@ def test(cnt, run):
 	now = time.time()
 	while run.value:
 		choice = randint(1, 100)
-		if choice <= 45:
+		if choice <= 100:
 			tran = [new_order_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
-		elif choice <= 88:
+		elif choice <= 0:
 			tran = [payment_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
-		elif choice <= 92:
+		elif choice <= 0:
 			tran = [order_status_tran, {'c_id' : randint(1, 10)}]
-		elif choice <= 96:
+		elif choice <= 0:
 			tran = [delivery_tran, {'w_id' : randint(1, 5)}]
 		else:
 			tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
-		
+				
 		tran[0](**tran[1])
 		with cnt.get_lock():
 			cnt.value += 1
 
 
-db.generate_mapping(create_tables=True)
+
 
 if __name__ == '__main__':
 	cnt = Value('i', 0)

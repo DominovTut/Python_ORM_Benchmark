@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 
 
 
-engine = create_engine("postgresql://bench_sa:alchemy@localhost/bench_sa")
+engine = create_engine("postgresql://benchmark_sa:alchemy@localhost/benchmark_sa")
 
 Base = declarative_base()
 
