@@ -29,7 +29,7 @@ def populate(n):
 
 		for j in range(5):
 			d = District(
-				warehouse=i,
+				warehouse_id=i,
 				name='dist %d %d' %(w.number, j),
 				street_1='d_st %d' %j,
 				street_2 ='d_st2 %d' %j,
@@ -39,6 +39,7 @@ def populate(n):
 				ytd=0,
 			)
 			session.add(d)
+			w.districts.append(d)
 			d_cnt += 1
 
 
@@ -62,7 +63,7 @@ def populate(n):
 			ytd_payment=0,
 			data1='customer %d' %i,
 			dtata2='hello %d'  %i,
-			district=randint(1, d_cnt),
+			district_id=randint(1, d_cnt),
 		)
 		session.add(c)
 		d = session.query(District).filter(District.id == randint(1, d_cnt)).first()
@@ -77,8 +78,8 @@ def populate(n):
 		session.add(it)
 		for j in range(1, n + 1):
 			s = Stock(
-				warehouse=j,
-				item=i,
+				warehouse_id=j,
+				item_id=i,
 				quantity = 100000,
 				ytd=randint(1, 100000),
 				order_cnt=0,

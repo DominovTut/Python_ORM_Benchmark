@@ -91,19 +91,21 @@ def order_status_tran(c_id):
 @db_session(retry=10)
 def delivery_tran(w_id):
 	whouse = Warehouse[w_id]
-	o_cust = []
-	for district in whouse.districts:
-		order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id).for_update().first()
+	o_c = []
+	districts = select(d for d in District if d.warehouse == whouse).order_by(District.id).for_update()
+	for district in districts:
+		order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id)	.first()
 		if not order:
 			return
 		order.is_o_delivered = True
 		for o_l in order.o_lns:
 			o_l.delivery_d = datetime.now()
-		o_cust.append(order.customer)
-
-	customers = select(c for c in Customer if c in o_cust).order_by(Customer.id).for_update()
+		o_c.append(order.customer)
+	customers = select(c for c in Customer if c in o_c).for_update()
 	for customer in customers:
 		customer.delivery_cnt += 1
+		
+	
 
 
 @db_session(retry=10)
