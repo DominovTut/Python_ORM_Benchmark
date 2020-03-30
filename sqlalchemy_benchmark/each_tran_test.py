@@ -21,7 +21,7 @@ def test_controler(cnt, run, start, gl_start):
             with start.get_lock():
                 start.value = now
 
-		
+
 
 def test(cnt, run, itr):
     now = time.time()
@@ -32,14 +32,14 @@ def test(cnt, run, itr):
             tran = [payment_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
         elif itr == 2:
             tran = [order_status_tran, {'c_id' : randint(1, 10)}]
-		elif itr == 3:
+        elif itr == 3:
             tran = [delivery_tran, {'w_id' : randint(1, 5)}]
         elif itr == 4:
             tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
         else:
             print("Sonething went wrong")
             return
-		
+
         tran[0](**tran[1])
         with cnt.get_lock():
             cnt.value += 1
@@ -63,7 +63,6 @@ if __name__ == '__main__':
         process = Process(target=test_controler, args=(cnt, run, start, gl_start))
         process.start()
         processes.append(process)
-
 
         for process in processes:
             process.join()
