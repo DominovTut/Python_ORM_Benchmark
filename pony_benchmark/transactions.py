@@ -2,7 +2,7 @@ from models import *
 from random import randint, choice
 from datetime import datetime
 from pony.orm import *
-
+from settings import AMOUNT_OF_WAREHOUSES
 
 
 @db_session(retry=10)
@@ -22,7 +22,7 @@ def new_order_tran(w_id, c_id):
     )
     items = []
     for i in range(ol_cnt):
-        item = Item[randint(1, 100)]
+        item = Item[randint(1, AMOUNT_OF_WAREHOUSES * 10)]
         items.append(item)
         ord_line = OrderLine(
             item=item,
@@ -55,8 +55,8 @@ def payment_tran(w_id, c_id):
         data='new_paynment',
         customer=customer,
     )	
-	
-	
+
+
 @db_session(retry=10)
 def order_status_tran(c_id):
     customer = Customer[c_id]
@@ -72,10 +72,6 @@ def order_status_tran(c_id):
             'amount' : ol.amount,
             'order' : ol.order
         })
-
-		
-
-	
 
 
 @db_session(retry=10)
@@ -108,6 +104,3 @@ def stock_level_tran(w_id):
                 continue
             stock = select(s for s in Stock if s.warehouse == whouse and s.item == ol.item).first()
             items_stock[item_name] = stock.quantity
-	
-	
-	

@@ -57,7 +57,7 @@ def populate(n):
             district=District[randint(1, 5)],
         )
         District[randint(1, 5)].customers.add(c)
-    for i in range(1, n * 100 + 1):
+    for i in range(1, n * 10 + 1):
         it = Item(
             name='item %d' %i,
             price=randint(1, 100000),
@@ -78,7 +78,7 @@ def populate(n):
 def main():
     db.generate_mapping(create_tables=True)
     populate(AMOUNT_OF_WAREHOUSES)
-	
-	
+
+
 if __name__ == '__main__':
     main()

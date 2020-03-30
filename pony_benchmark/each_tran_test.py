@@ -35,7 +35,7 @@ def test(cnt, run, itr):
         elif itr == 4:
             tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
         else:
-            print("Sonething went wrong")
+            print("Something went wrong")
             return
 		
         tran[0](**tran[1])

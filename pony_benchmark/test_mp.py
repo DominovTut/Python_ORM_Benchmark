@@ -19,7 +19,6 @@ def test_controler(cnt, run, start, gl_start):
             with start.get_lock():
                 start.value = now
 
-		
 
 def test(cnt, run):
     now = time.time()
@@ -57,7 +56,6 @@ if __name__ == '__main__':
     process = Process(target=test_controler, args=(cnt, run, start, gl_start))
     process.start()
     processes.append(process)
-
 
     for process in processes:
         process.join()

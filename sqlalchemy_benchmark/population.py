@@ -44,7 +44,7 @@ def populate(n):
             d_cnt += 1
 
 
-    for i in range(10 * n):
+    for i in range(5 * n):
         c = Customer(
             first_name=choice(names),
             middle_name=choice(names),
@@ -70,7 +70,7 @@ def populate(n):
         d = session.query(District).filter(District.id == randint(1, d_cnt)).first()
         d.customers.append(c)
         session.commit()
-    for i in range(1, 100 * n + 1):
+    for i in range(1, n * 10 + 1):
         it = Item(
             name='item %d' %i,
             price=randint(1, 100000),

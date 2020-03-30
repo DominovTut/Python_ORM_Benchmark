@@ -23,7 +23,7 @@ while True:
         tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
 
     tran[0](**tran[1])
-    	
+
     now = time.time()
     if now - start >= 10:
         start = now

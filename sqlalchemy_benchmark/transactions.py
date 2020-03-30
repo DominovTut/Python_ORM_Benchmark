@@ -5,8 +5,7 @@ from datetime import datetime
 from models import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
-
-
+from settings import AMOUNT_OF_WAREHOUSES
 
 
 def new_order_tran(w_id, c_id):
@@ -28,9 +27,9 @@ def new_order_tran(w_id, c_id):
     )
     session.add(order)
     items = []
-	
+
     for i in range(ol_cnt):
-        item = session.query(Item).filter(Item.id == randint(1, 100)).first()
+        item = session.query(Item).filter(Item.id == randint(1, AMOUNT_OF_WAREHOUSES * 10)).first()
         items.append(item)
         ord_line = OrderLine(
             item=item,
@@ -38,23 +37,23 @@ def new_order_tran(w_id, c_id):
             order=order
         )
         session.add(ord_line)
-		
+
     stocks = session.query(Stock).filter(Stock.warehouse == whouse and Stock.item in items).order_by(text("id")).with_for_update()
     for stock in stocks:
         stock.order_cnt += 1
         stock.quantity -= amount
     session.commit()
-		
-		
+
+
 def payment_tran(w_id, c_id):
     Session = sessionmaker(bind=engine)
     session = Session()
-	
+
     whouse = session.query(Warehouse).filter(Warehouse.id == w_id).first()
     district = choice(whouse.districts.all())
     customer = session.query(Customer).filter(Customer.id == c_id).first()
     h_amount = randint(10, 5000)
-	
+
     whouse.ytd += h_amount
     district.ytd += h_amount
     customer.balance -= h_amount
@@ -73,7 +72,7 @@ def payment_tran(w_id, c_id):
 def order_status_tran(c_id):
     Session = sessionmaker(bind=engine)
     session = Session()
-	
+
     customer = session.query(Customer).filter(Customer.id == c_id).first()
     last_order = session.query(Order).filter(Order.customer == customer).order_by(text("id desc")).first()
     o_ls = []
@@ -89,14 +88,12 @@ def order_status_tran(c_id):
             'ol_order' : ol.order
         })
     session.commit()
-	
-
 
 
 def delivery_tran(w_id):
     Session = sessionmaker(bind=engine)
     session = Session()
-	
+
     whouse = session.query(Warehouse).filter(Warehouse.id == w_id).first()
     districts = session.query(District).filter(District.warehouse == whouse).order_by(text("id")).with_for_update()
     customers_id = []
@@ -115,13 +112,12 @@ def delivery_tran(w_id):
     session.commit()
 
 
-
 def stock_level_tran(w_id):
     Session = sessionmaker(bind=engine)
     session = Session()
-	
+
     whouse = session.query(Warehouse).filter(Warehouse.id == w_id).first()
-	
+
     items_stock = {}
     for order in session.query(Order).filter(Order.warehouse == whouse).order_by(text("id desc"))[:20]:
         for ol in order.o_lns:
@@ -131,5 +127,3 @@ def stock_level_tran(w_id):
             stock = session.query(Stock).filter(Stock.warehouse == whouse and Stock.item == item).first()
             items_stock[item.name] = stock.quantity
     session.commit()
-			
-	

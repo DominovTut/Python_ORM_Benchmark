@@ -43,7 +43,6 @@ def test():
             start = now
 
 
-		
 threads = []
 gl_start = start = now = time.time()
 
@@ -55,4 +54,3 @@ for i in range(5):
 
 for process in threads:
     process.join()
-		

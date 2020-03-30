@@ -41,7 +41,7 @@ def test():
             start = now
 
 
-		
+
 db.generate_mapping(create_tables=True)
 threads = []
 gl_start = start = now = time.time()
@@ -54,4 +54,3 @@ for i in range(5):
 
 for process in threads:
     process.join()
-		

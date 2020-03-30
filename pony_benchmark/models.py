@@ -19,7 +19,7 @@ class Warehouse(db.Entity):
     orders = Set("Order")
     districts = Set("District")
     stocks = Set("Stock")
-	
+
 
 class District(db.Entity):
     warehouse = Required(Warehouse)
@@ -56,21 +56,16 @@ class Customer(db.Entity):
     district = Required(District)
     orders = Set("Order")
     history = Set("History")
-	
-	
-	
 
 
 class Stock(db.Entity):
     warehouse = Required(Warehouse)
     item = Required("Item")
-    composite_key(warehouse, item)
     quantity = Required(int)
     ytd = Required(float)
     order_cnt = Required(int)
     remote_cnt = Required(int)
     data = Required(str)
-	
 
 
 class Item(db.Entity):
@@ -80,7 +75,7 @@ class Item(db.Entity):
     
     stock = Set(Stock)
     o_lns = Set("OrderLine")
-					
+
 
 class Order(db.Entity):
     warehouse = Required(Warehouse)
@@ -90,7 +85,6 @@ class Order(db.Entity):
     entry_d = Required(datetime)
     is_o_delivered = Required(bool, default=False)
     o_lns = Set("OrderLine")
-	
 
 
 class OrderLine(db.Entity):
