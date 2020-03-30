@@ -8,10 +8,10 @@ from sqlalchemy.orm import relationship
 from settings import PROVIDER
 
 
-
 engine = create_engine(PROVIDER['postgres'])
 
 Base = declarative_base()
+
 
 class Warehouse(Base):
     __tablename__ = 'warehouse'
@@ -34,7 +34,7 @@ class District(Base):
     __tablename__ = 'district'
     
     id = Column(Integer, primary_key=True)
-    warehouse_id = Column(Integer, ForeignKey('warehouse.id'))
+    warehouse_id = Column(Integer, ForeignKey('warehouse.id'), index=True)
     name = Column(String, nullable=False)
     street_1 = Column(String, nullable=False)
     street_2 = Column(String, nullable=False)
@@ -68,7 +68,7 @@ class Customer(Base):
     ytd_payment = Column(Float, nullable=False)
     data1 = Column(Text, nullable=False)
     dtata2 = Column(Text, nullable=False)
-    district_id = Column(Integer, ForeignKey('district.id'))
+    district_id = Column(Integer, ForeignKey('district.id'), index=True)
     orders = relationship("Order", backref='customer', lazy='dynamic')
     history = relationship("History", backref='customer', lazy='dynamic')
 
@@ -77,8 +77,8 @@ class Stock(Base):
     __tablename__ = 'stock'
     
     id = Column(Integer, primary_key=True)
-    warehouse_id = Column(Integer, ForeignKey('warehouse.id'))
-    item_id = Column(Integer, ForeignKey('item.id'))
+    warehouse_id = Column(Integer, ForeignKey('warehouse.id'), index=True)
+    item_id = Column(Integer, ForeignKey('item.id'), index=True)
     quantity = Column(Integer, nullable=False)
     ytd = Column(Integer, nullable=False)
     order_cnt = Column(Integer, nullable=False)
@@ -97,16 +97,16 @@ class Item(Base):
     
     stocks = relationship('Stock', backref='item', lazy='dynamic')
     o_lns = relationship("OrderLine", backref='item', lazy='dynamic')
-    				
+
 
 class Order(Base):
     __tablename__ = 'order'
     
     id = Column(Integer, primary_key=True)
-    whouse_id = Column(Integer, ForeignKey('warehouse.id'))
-    district_id = Column(Integer, ForeignKey('district.id'))
+    whouse_id = Column(Integer, ForeignKey('warehouse.id'), index=True)
+    district_id = Column(Integer, ForeignKey('district.id'), index=True)
     ol_cnt = Column(Integer, nullable=False)
-    customer_id = Column(Integer, ForeignKey('customer.id'))
+    customer_id = Column(Integer, ForeignKey('customer.id'), index=True)
     entry_d = Column(DateTime, nullable=False)
     is_o_delivered = Column(Boolean, nullable=False, default=False)
     o_lns = relationship("OrderLine", backref='order', lazy='dynamic') 
@@ -117,9 +117,9 @@ class OrderLine(Base):
     
     id = Column(Integer, primary_key=True)
     delivery_d = Column(DateTime, nullable=True)
-    item_id = Column(Integer, ForeignKey('item.id'))
+    item_id = Column(Integer, ForeignKey('item.id'), index=True)
     amount = Column(Integer, nullable=False)
-    order_id = Column(Integer, ForeignKey('order.id'))
+    order_id = Column(Integer, ForeignKey('order.id'), index=True)
 
     
 class History(Base):
@@ -129,7 +129,7 @@ class History(Base):
     date = Column(DateTime, nullable=False)
     amount = Column(Float, nullable=False)
     data = Column(String, nullable=False)
-    customer_id = Column(Integer, ForeignKey('customer.id'))
+    customer_id = Column(Integer, ForeignKey('customer.id'), index=True)
 
 
 def create_tables():
