@@ -40,8 +40,9 @@ def new_order_tran(w_id, c_id):
 
     stocks = session.query(Stock).filter(Stock.warehouse == whouse and Stock.item in items).order_by(text("id")).with_for_update()
     for stock in stocks:
+        i_in_o = items.count(stock.item)
         stock.order_cnt += 1
-        stock.quantity -= amount
+        stock.quantity -= amount * i_in_o
     session.commit()
 
 
@@ -108,7 +109,8 @@ def delivery_tran(w_id):
         customers_id.append(order.customer_id)
     customers = session.query(Customer).filter(Customer.id in customers_id).order_by(text("id")).with_for_update()
     for customer in customers:
-        customer.delivery_cnt += 1
+        amount = customers_id.count(customer.id)
+        customer.delivery_cnt += amount
     session.commit()
 
 

@@ -12,7 +12,7 @@ def new_order_tran(w_id, c_id):
     customer = Customer[c_id]
     ol_cnt = randint(1, 10)
     amount = randint(1, 10)
-    
+
     order = Order(
         ol_cnt=ol_cnt,
         customer=customer,
@@ -32,8 +32,9 @@ def new_order_tran(w_id, c_id):
     stocks = select(stock for stock in Stock 
                     if stock.warehouse == whouse and stock.item in items).order_by(Stock.id).for_update()
     for stock in stocks:
+        i_in_o = items.count(stock.item)
         stock.order_cnt += 1
-        stock.quantity -= amount
+        stock.quantity -= amount * i_in_o
 
 
 @db_session(retry=10)
@@ -89,7 +90,8 @@ def delivery_tran(w_id):
         o_c.append(order.customer)
     customers = select(c for c in Customer if c in o_c).for_update()
     for customer in customers:
-        customer.delivery_cnt += 1
+        amount = o_c.count(customer)
+        customer.delivery_cnt += amount
 
 
 @db_session(retry=10)
