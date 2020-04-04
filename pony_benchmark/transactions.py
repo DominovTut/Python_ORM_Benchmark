@@ -81,7 +81,7 @@ def delivery_tran(w_id):
     o_c = []
     districts = select(d for d in District if d.warehouse == whouse).order_by(District.id).for_update()
     for district in districts:
-        order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id)	.first()
+        order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id).first()
         if not order:
             return
         order.is_o_delivered = True
