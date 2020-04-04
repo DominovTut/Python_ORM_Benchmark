@@ -21,28 +21,27 @@ def test_controler(cnt, run, start, gl_start):
             with start.get_lock():
                 start.value = now
 
-		
 
 def test(cnt, run):
     now = time.time()
     while run.value:
         choice = randint(1, 100)
         if choice <= 45:
-            tran = [new_order_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
+            tran = [new_order_tran,
+                    {'w_id': randint(1, AMOUNT_OF_WAREHOUSES), 'c_id': randint(1, AMOUNT_OF_WAREHOUSES * 10)}]
         elif choice <= 88:
-            tran = [payment_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
+            tran = [payment_tran,
+                    {'w_id': randint(1, AMOUNT_OF_WAREHOUSES), 'c_id': randint(1, AMOUNT_OF_WAREHOUSES * 10)}]
         elif choice <= 92:
-            tran = [order_status_tran, {'c_id' : randint(1, 10)}]
+            tran = [order_status_tran, {'c_id': randint(1, AMOUNT_OF_WAREHOUSES * 10)}]
         elif choice <= 96:
-            tran = [delivery_tran, {'w_id' : randint(1, 5)}]
+            tran = [delivery_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES)}]
         else:
-            tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
+            tran = [stock_level_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES)}]
         
         tran[0](**tran[1])
         with cnt.get_lock():
             cnt.value += 1
-
-
 
 
 if __name__ == '__main__':
@@ -59,7 +58,6 @@ if __name__ == '__main__':
     process = Process(target=test_controler, args=(cnt, run, start, gl_start))
     process.start()
     processes.append(process)
-
 
     for process in processes:
         process.join()

@@ -43,8 +43,7 @@ def populate(n):
             w.districts.append(d)
             d_cnt += 1
 
-
-    for i in range(5 * n):
+    for i in range(10 * n):
         c = Customer(
             first_name=choice(names),
             middle_name=choice(names),

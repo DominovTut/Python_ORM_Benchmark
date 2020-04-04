@@ -88,7 +88,7 @@ def delivery_tran(w_id):
         for o_l in order.o_lns:
             o_l.delivery_d = datetime.now()
         o_c.append(order.customer)
-    customers = select(c for c in Customer if c in o_c).for_update()
+    customers = select(c for c in Customer if c in o_c).order_by(Customer.id).for_update()
     for customer in customers:
         amount = o_c.count(customer)
         customer.delivery_cnt += amount

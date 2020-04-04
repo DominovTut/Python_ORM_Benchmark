@@ -26,11 +26,11 @@ def new_order_tran(w_id, c_id):
         district=district
     )
     session.add(order)
-    items = []
+    items_id = []
 
     for i in range(ol_cnt):
         item = session.query(Item).filter(Item.id == randint(1, AMOUNT_OF_WAREHOUSES * 10)).first()
-        items.append(item)
+        items_id.append(item.id)
         ord_line = OrderLine(
             item=item,
             amount=amount,
@@ -38,9 +38,9 @@ def new_order_tran(w_id, c_id):
         )
         session.add(ord_line)
 
-    stocks = session.query(Stock).filter(Stock.warehouse == whouse and Stock.item in items).order_by(text("id")).with_for_update()
+    stocks = session.query(Stock).filter(Stock.warehouse == whouse and Stock.item_id in items_id).order_by(text("id")).with_for_update()
     for stock in stocks:
-        i_in_o = items.count(stock.item)
+        i_in_o = items_id.count(stock.item_id)
         stock.order_cnt += 1
         stock.quantity -= amount * i_in_o
     session.commit()

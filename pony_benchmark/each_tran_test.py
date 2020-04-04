@@ -4,7 +4,7 @@ import os
 import time
 from random import randint
 from multiprocessing import Process, Value
-from settings import AMOUNT_OF_PROCESSES, TEST_DURATION, PRINT_INTERVAL
+from settings import AMOUNT_OF_PROCESSES, TEST_DURATION, PRINT_INTERVAL, AMOUNT_OF_WAREHOUSES
 
 
 def test_controler(cnt, run, start, gl_start):
@@ -24,15 +24,15 @@ def test(cnt, run, itr):
     now = time.time()
     while run.value:
         if itr == 0:
-            tran = [new_order_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
+            tran = [new_order_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES), 'c_id': AMOUNT_OF_WAREHOUSES * 10}]
         elif itr == 1:
-            tran = [payment_tran, {'w_id' : randint(1, 5), 'c_id' : randint(1, 10)}]
+            tran = [payment_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES), 'c_id': randint(1, AMOUNT_OF_WAREHOUSES * 10)}]
         elif itr == 2:
-            tran = [order_status_tran, {'c_id' : randint(1, 10)}]
+            tran = [order_status_tran, {'c_id': randint(1, AMOUNT_OF_WAREHOUSES * 10)}]
         elif itr == 3:
-            tran = [delivery_tran, {'w_id' : randint(1, 5)}]
+            tran = [delivery_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES)}]
         elif itr == 4:
-            tran = [stock_level_tran, {'w_id' : randint(1, 5)}]
+            tran = [stock_level_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES)}]
         else:
             print("Something went wrong")
             return
