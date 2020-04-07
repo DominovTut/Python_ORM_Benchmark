@@ -1,2 +1,5 @@
 pony_benchmark/__pycache__/
 sqlalchemy_benchmark/__pycache__/
+*.txt
+pony_benchmark/test.py
+sqlalchemy_benchmark/test.py
