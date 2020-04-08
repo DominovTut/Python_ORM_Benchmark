@@ -35,6 +35,7 @@ def new_order_tran(w_id, c_id):
         i_in_o = items.count(stock.item)
         stock.order_cnt += 1
         stock.quantity -= amount * i_in_o
+    return True
 
 
 @db_session(retry=10)
@@ -56,6 +57,7 @@ def payment_tran(w_id, c_id):
         data='new_paynment',
         customer=customer,
     )	
+    return True
 
 
 @db_session(retry=10)
@@ -64,7 +66,7 @@ def order_status_tran(c_id):
     last_order = customer.orders.select().order_by(lambda o: desc(o.id)).first()
     o_ls = []
     if not last_order:
-        return
+        return False
     status = last_order.is_o_delivered
     for ol in last_order.o_lns:
         o_ls.append({
@@ -73,7 +75,7 @@ def order_status_tran(c_id):
             'amount' : ol.amount,
             'order' : ol.order
         })
-
+    return True
 
 @db_session(retry=10)
 def delivery_tran(w_id):
@@ -107,3 +109,4 @@ def stock_level_tran(w_id):
                 continue
             stock = select(s for s in Stock if s.warehouse == whouse and s.item == ol.item).first()
             items_stock[item_name] = stock.quantity
+    return True

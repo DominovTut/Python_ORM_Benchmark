@@ -34,10 +34,10 @@ def test(cnt, run):
             tran = [delivery_tran, {'w_id' : randint(1, AMOUNT_OF_WAREHOUSES)}]
         else:
             tran = [stock_level_tran, {'w_id' : randint(1, AMOUNT_OF_WAREHOUSES)}]
-        
-        tran[0](**tran[1])
-        with cnt.get_lock():
-            cnt.value += 1
+
+        if tran[0](**tran[1]):
+            with cnt.get_lock():
+                cnt.value += 1
 
 
 db.generate_mapping(create_tables=True)

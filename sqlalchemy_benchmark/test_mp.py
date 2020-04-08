@@ -39,9 +39,9 @@ def test(cnt, run):
         else:
             tran = [stock_level_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES)}]
         
-        tran[0](**tran[1])
-        with cnt.get_lock():
-            cnt.value += 1
+        if tran[0](**tran[1]):
+            with cnt.get_lock():
+                cnt.value += 1
 
 
 if __name__ == '__main__':

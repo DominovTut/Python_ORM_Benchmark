@@ -37,9 +37,9 @@ def test(cnt, run, itr):
             print("Something went wrong")
             return
 
-        tran[0](**tran[1])
-        with cnt.get_lock():
-            cnt.value += 1
+        if tran[0](**tran[1]):
+            with cnt.get_lock():
+                scnt.value += 1
 
 
 db.generate_mapping(create_tables=True)
