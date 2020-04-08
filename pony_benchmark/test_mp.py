@@ -4,7 +4,7 @@ import os
 import time
 from random import randint
 from multiprocessing import Process, Value
-from settings import AMOUNT_OF_PROCESSES, TEST_DURATION, PRINT_INTERVAL
+from settings import AMOUNT_OF_PROCESSES, TEST_DURATION, PRINT_INTERVAL, AMOUNT_OF_WAREHOUSES
 
 
 def test_controler(cnt, run, start, gl_start):

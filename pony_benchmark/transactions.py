@@ -83,7 +83,7 @@ def delivery_tran(w_id):
     for district in districts:
         order = select(o for o in Order if o.district == district and o.is_o_delivered == False).order_by(Order.id).first()
         if not order:
-            return
+            return False
         order.is_o_delivered = True
         for o_l in order.o_lns:
             o_l.delivery_d = datetime.now()
@@ -92,6 +92,7 @@ def delivery_tran(w_id):
     for customer in customers:
         amount = o_c.count(customer)
         customer.delivery_cnt += amount
+    return True
 
 
 @db_session(retry=10)

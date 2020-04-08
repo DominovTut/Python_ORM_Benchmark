@@ -6,7 +6,7 @@ from models import *
 from sqlalchemy.orm import sessionmaker
 from transactions import *
 from multiprocessing import Process, Value, Lock
-from settings import AMOUNT_OF_PROCESSES, TEST_DURATION, PRINT_INTERVAL
+from settings import AMOUNT_OF_PROCESSES, TEST_DURATION, PRINT_INTERVAL, AMOUNT_OF_WAREHOUSES
 
 
 def test_controler(cnt, run, start, gl_start):
@@ -22,12 +22,11 @@ def test_controler(cnt, run, start, gl_start):
                 start.value = now
 
 
-
 def test(cnt, run, itr):
     now = time.time()
     while run.value:
         if itr == 0:
-            tran = [new_order_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES), 'c_id': AMOUNT_OF_WAREHOUSES * 10}]
+            tran = [new_order_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES), 'c_id': randint(1, AMOUNT_OF_WAREHOUSES * 10)}]
         elif itr == 1:
             tran = [payment_tran, {'w_id': randint(1, AMOUNT_OF_WAREHOUSES), 'c_id': randint(1, AMOUNT_OF_WAREHOUSES * 10)}]
         elif itr == 2:
@@ -40,9 +39,9 @@ def test(cnt, run, itr):
             print("Sonething went wrong")
             return
 
-        tran[0](**tran[1])
-        with cnt.get_lock():
-            cnt.value += 1
+        if tran[0](**tran[1]):
+            with cnt.get_lock():
+                cnt.value += 1
 
 
 transactions = (new_order_tran, payment_tran, order_status_tran, delivery_tran, stock_level_tran)
