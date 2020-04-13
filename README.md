@@ -2,7 +2,7 @@
 
 This benchmark is based on the TPC-C benchmark and is adapted for testing Python ORMs. The test database represents a warehouse network. Five different types of transactions are submitted to the database with different probabilities. The test measures how many transactions are processed per minute. Also, this benchmark estimates the performance on each individual transaction.
 
-<b>Тестовые транзакции:</b><br>
+<b>Transactions:</b><br>
 1.new_order - 45%<br>
 2.payment - 43%<br>
 3.order_status - 4%<br>
